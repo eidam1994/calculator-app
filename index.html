@@ -6,35 +6,202 @@
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <title></title>
     <script src="js/mui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <link href="css/mui.min.css" rel="stylesheet"/>
     <script type="text/javascript" charset="utf-8">
         mui.init();
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
-<div id="app">
+<script type="text/x-template" id="app-template">
     <v-app>
-        <v-content>
-            <v-container>{{title}}</v-container>
-        </v-content>
+        <div style="height: 100%">
+            <v-app-bar dense fixed>
+                <v-toolbar-title>Home</v-toolbar-title>
+            </v-app-bar>
+            <div style="margin-top: 56px;margin-bottom: 64px">
+                <v-card style="margin: 8px">
+                    <v-carousel :show-arrows="false" height="200px">
+                        <v-carousel-item
+                                v-for="(item,i) in items"
+                                :key="i"
+                                :src="item.src"
+                        ></v-carousel-item>
+                    </v-carousel>
+                </v-card>
+                <v-card style="margin: 8px">
+                    <v-row no-gutters>
+                        <v-col cols="3">
+                            <v-card class="pa-2 button-area" outlined tile @click="toNext('views/calculator.html')">
+                                <div style="text-align: center">
+                                    <v-avatar color="indigo" rounded size="36">
+                                        <v-icon dark>
+                                            mdi-account-circle
+                                        </v-icon>
+                                    </v-avatar>
+                                    <div>Calculator</div>
+                                </div>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="3">
+                            <v-card class="pa-2 button-area" outlined tile>
+                                <div style="text-align: center">
+                                    <v-avatar rounded color="primary" size="36"></v-avatar>
+                                    <div>Calculator</div>
+                                </div>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="3">
+                            <v-card class="pa-2 button-area" outlined tile>
+                                <div style="text-align: center">
+                                    <v-avatar rounded color="primary" size="36"></v-avatar>
+                                    <div>Calculator</div>
+                                </div>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="3">
+                            <v-card class="pa-2 button-area" outlined tile>
+                                <div style="text-align: center">
+                                    <v-avatar rounded color="primary" size="36"></v-avatar>
+                                    <div>Calculator</div>
+                                </div>
+                            </v-card>
+                        </v-col>
+                        <v-col cols="3">
+                            <v-card class="pa-2 button-area" outlined tile>
+                                <div style="text-align: center">
+                                    <v-avatar rounded color="primary" size="36"></v-avatar>
+                                    <div>Calculator</div>
+                                </div>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-card>
+                <span style="margin-left: 8px">Message Board</span>
+                <div style="margin: 8px">
+                    <v-card style="margin-bottom: 8px">
+                        <v-card-title class="headline">
+                            Unlimited music now
+                        </v-card-title>
+
+                        <v-card-subtitle>Listen to your favorite artists and albums whenever and wherever, online and offline.</v-card-subtitle>
+                    </v-card>
+                    <v-card>
+                        <v-card-title class="headline">
+                            Unlimited music now
+                        </v-card-title>
+
+                        <v-card-subtitle>Listen to your favorite artists and albums whenever and wherever, online and offline.</v-card-subtitle>
+                    </v-card>
+                </div>
+            </div>
+        </div>
+        <v-bottom-navigation :value="value" color="primary" grow fixed>
+            <v-btn @click="navChange('index.html')">
+                <span>Home</span>
+
+                <v-icon>mdi-home</v-icon>
+            </v-btn>
+
+            <v-btn @click="navChange('print.html')">
+                <span>Print</span>
+
+                <v-icon>mdi-printer</v-icon>
+            </v-btn>
+
+            <v-btn @click="navChange('file.html')">
+                <span>File</span>
+
+                <v-icon>mdi-folder</v-icon>
+            </v-btn>
+            <v-btn @click="navChange('setting.html')">
+                <span>Setting</span>
+
+                <v-icon>mdi-settings</v-icon>
+            </v-btn>
+            <v-btn @click="navChange('profile.html')">
+                <span>Profile</span>
+
+                <v-icon>mdi-account</v-icon>
+            </v-btn>
+        </v-bottom-navigation>
     </v-app>
-</div>
+</script>
+<div id="app"></div>
 <script>
-    new Vue({
-        el: '#app',
-        vuetify: new Vuetify(),
-        data() {
-            return {
-                title: 'Hello'
+    const App = {
+        template: '#app-template',
+        data: () => ({
+            title: 'Hello',
+            value: 0,
+            items: [
+                {
+                    src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg',
+                },
+                {
+                    src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg',
+                },
+                {
+                    src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg',
+                },
+                {
+                    src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg',
+                },
+            ]
+        }),
+        methods: {
+            toNext(_address) {
+                window.location.href = _address;
+            },
+            navChange(nav) {
+                window.location.href = nav;
+            },
+            plusReady() {
+                plus.key.addEventListener('backbutton',function(){
+                    ('iOS'==plus.os.name)?plus.nativeUI.confirm('确认退出？', function(e){
+                        if(e.index>0){
+                            plus.runtime.quit();
+                        }
+                    }, 'HelloH5', ['取消','确定']):(confirm('确认退出？')&&plus.runtime.quit());
+                },false);
+                // 关闭启动界面
+                plus.navigator.setStatusBarBackground('#D74B28');
+                setTimeout(function(){
+                    plus.navigator.closeSplashscreen();
+                },200);
+            },
+            startPlus() {
+                if(window.plus){
+                    this.plusReady();
+                }else{
+                    document.addEventListener('plusready',this.plusReady,false);
+                }
             }
+        },
+        created() {
+            this.startPlus()
         }
-    })
+    }
+    
+    new Vue({
+        vuetify: new Vuetify(),
+        render: h => h(App)
+    }).$mount('#app')
 </script>
 </body>
+<style>
+    .button-area {
+        display: flex;
+        align-items: center; /*垂直居中*/
+        justify-content: center; /*水平居中*/
+        font-size: 14px;
+        height: 100%;
+        border: none !important;
+    }
+</style>
 </html>

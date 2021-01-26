@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title></title>
+    <script src="../js/mui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        mui.init();
+    </script>
+    <script src="../js/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+<script type="text/x-template" id="app-template">
+    <v-app>
+        <div>
+            <v-toolbar fixed>
+                <v-btn icon @click="back">
+                    <v-icon>mdi-arrow-left</v-icon>
+                </v-btn>
+                <v-toolbar-title>Result</v-toolbar-title>
+            </v-toolbar>
+            <v-card class="form-card" style="margin: 8px;display: inline-block">
+                <v-card-title>
+                    <v-icon>mdi-book</v-icon>
+                    Information
+                </v-card-title>
+                <v-list-item style="padding-top: 8px">
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;File Name: {{fileName}}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Material: {{material}}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Laserleistung: {{laserleistung}} W</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Deposition Rate: {{rate}} %</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Material Removal Ratio: {{removal}} %</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Powder Efficiency DED: {{powder}} %</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-card>
+            <v-card class="form-card" style="margin: 8px;">
+                <v-card-title>
+                    <v-icon>mdi-chart-pie</v-icon>
+                    Ratio
+                </v-card-title>
+                <div id="cakeChart" style="width: 100%;height: 200px;padding-left: 12px">
+                </div>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Raw material KEA: {{raw}} J/Kg</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Powderproduction KEA: {{powderproduction}} J/Kg</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;DED KEA: {{ded}} J/Kg</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Post Processing KEA: {{processing}} J/Kg</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Total KEA: {{totalKEA}} J/Kg</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-card>
+            <v-card class="form-card" style="margin: 8px;">
+                <v-card-title>
+                    <v-icon>mdi-chart-bar</v-icon>
+                    Value
+                </v-card-title>
+                <div id="barChart" style="width: 100%;height: 300px;padding-left: 12px">
+                </div>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Raw material KEA: {{raw2}} %</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Powderproduction KEA: {{powderproduction2}} %</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;DED KEA: {{ded2}} %</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Post Processing KEA: {{processing2}} %</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-content>
+                        <v-list-item-title>&nbsp;Total KEA: {{totalKEA2}} %</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-card>
+        </div>
+    </v-app>
+</script>
+<div id="app"></div>
+</body>
+<script>
+    const App = {
+        template: '#app-template',
+        data: () => ({
+            fileName: '123.stl',
+            material: 'Ti-6Al-4V',
+            laserleistung: '1000',
+            rate: '80',
+            removal: '60',
+            powder: '50',
+            raw: '1000',
+            powderproduction: '1000',
+            ded: '1000',
+            processing: '1000',
+            totalKEA: '4000',
+            raw2: '10',
+            powderproduction2: '20',
+            ded2: '30',
+            processing2: '40',
+            totalKEA2: '100'
+        }),
+        methods: {
+            back() {
+                window.history.go(-1);
+            },
+            drawChart() {
+                var myChart = echarts.init(document.getElementById('cakeChart'));
+                var option = {
+                    title: {
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                    },
+                    series: [
+                        {
+                            name: '访问来源',
+                            type: 'pie',
+                            radius: '50%',
+                            data: [
+                                {value: 1048, name: '搜索引擎'},
+                                {value: 735, name: '直接访问'},
+                                {value: 580, name: '邮件营销'},
+                                {value: 484, name: '联盟广告'},
+                                {value: 300, name: '视频广告'}
+                            ],
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            },
+                            label: {    //引导线设置
+                                normal: {
+                                    show: false,   //引导线显示
+                                }
+                            }
+                        }
+                    ]
+                };
+                myChart.setOption(option)
+                var barChart = echarts.init(document.getElementById('barChart'));
+                var barOption = {
+                    xAxis: {
+                        type: 'category',
+                        data: ['Mon', 'Tue', 'Wed', 'Thu']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: [120, 200, 150, 80],
+                        type: 'bar'
+                    }]
+                };
+                barChart.setOption(barOption)
+            }
+        },
+        mounted() {
+            this.$nextTick(() => {
+                this.drawChart()
+            })
+        }
+    }
+
+
+    new Vue({
+        vuetify: new Vuetify(),
+        render: h => h(App)
+    }).$mount('#app')
+</script>
+<style>
+    .form-card {
+        width: calc(100% - 16px);
+    }
+    
+    .v-card__title {
+        padding-bottom: 0px !important;
+    }
+
+    .v-list-item {
+        min-height: 0 !important;
+    }
+    
+    .v-list-item__content {
+        padding-top: 0px !important;
+    }
+</style>
+</html>

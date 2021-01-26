@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+        mui.init();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+<script type="text/x-template" id="app-template">
+    <v-app>
+        <div style="height: 100%">
+            <v-app-bar dense fixed>
+                <v-toolbar-title>Print</v-toolbar-title>
+            </v-app-bar>
+            <div style="margin-top: 56px;margin-bottom: 64px">
+            </div>
+        </div>
+        <v-bottom-navigation :value="value" color="primary" grow fixed>
+            <v-btn @click="navChange('index.html')">
+                <span>Home</span>
+
+                <v-icon>mdi-home</v-icon>
+            </v-btn>
+
+            <v-btn @click="navChange('print.html')">
+                <span>Print</span>
+
+                <v-icon>mdi-printer</v-icon>
+            </v-btn>
+
+            <v-btn @click="navChange('file.html')">
+                <span>File</span>
+
+                <v-icon>mdi-folder</v-icon>
+            </v-btn>
+            <v-btn @click="navChange('setting.html')">
+                <span>Setting</span>
+
+                <v-icon>mdi-settings</v-icon>
+            </v-btn>
+            <v-btn>
+                <span @click="navChange('profile.html')">Profile</span>
+
+                <v-icon>mdi-account</v-icon>
+            </v-btn>
+        </v-bottom-navigation>
+    </v-app>
+</script>
+<div id="app"></div>
+<script>
+    const App = {
+        template: '#app-template',
+        data: () => ({
+            value: 1
+        }),
+        methods: {
+            navChange(nav) {
+                window.location.href = nav;
+            }
+        }
+    }
+
+    new Vue({
+        vuetify: new Vuetify(),
+        render: h => h(App)
+    }).$mount('#app')
+</script>
+</body>
+</html>

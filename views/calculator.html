@@ -1,0 +1,209 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title></title>
+    <script src="../js/mui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        mui.init();
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+
+<body>
+<script type="text/x-template" id="app-template">
+    <v-app>
+        <div>
+            <v-toolbar fixed>
+                <v-btn icon @click="back">
+                    <v-icon>mdi-arrow-left</v-icon>
+                </v-btn>
+                <v-toolbar-title>Calculator</v-toolbar-title>
+            </v-toolbar>
+            <div>
+                <v-card class="form-card" style="margin: 8px;display: inline-block">
+                    <div style="text-align: center;margin-top: 5px;margin-bottom: 5px">
+                        <v-avatar style="position: absolute;left: 10px" size="24">
+                            <img src="../icon/chemical.png">
+                        </v-avatar>
+                        Material
+                    </div>
+                    <v-select :items="items" label="Material" style="margin: 0 5px 0 5px"></v-select>
+                </v-card>
+                <v-card class="form-card" style="margin: 8px;display: inline-block">
+                    <div style="text-align: center;margin-top: 5px;margin-bottom: 5px">
+                        <v-avatar style="position: absolute;left: 10px" size="24">
+                            <img src="../icon/volume.png">
+                        </v-avatar>
+                        Volumen
+                        <v-avatar tile style="position: absolute;left: calc(100% - 30px)" size="24">
+                            <img src="../icon/import.png">
+                        </v-avatar>
+                    </div>
+                    <v-slider style="margin: 0 5px 0 5px" v-model="volumen" class="align-center" :max="100" :min="0"
+                              hide-details>
+                        <template v-slot:append>
+                            <v-text-field
+                                    v-model="volumen"
+                                    class="mt-0 pt-0"
+                                    hide-details
+                                    solo
+                                    type="number"
+                                    style="width: 50px;text-align: center;">
+                            </v-text-field>
+                            <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;cm3</span>
+                        </template>
+                    </v-slider>
+                </v-card>
+                <v-card class="form-card" style="margin: 8px;display: inline-block">
+                    <div style="text-align: center;margin-top: 5px;margin-bottom: 5px">
+                        <v-avatar style="position: absolute;left: 10px" size="24">
+                            <img src="../icon/laserleistung.png">
+                        </v-avatar>
+                        Laserleistung
+                    </div>
+                    <v-slider style="margin: 0 5px 0 5px" v-model="laserleistung" class="align-center" :max="100"
+                              :min="0" hide-details>
+                        <template v-slot:append>
+                            <v-text-field
+                                    v-model="laserleistung"
+                                    class="mt-0 pt-0"
+                                    hide-details
+                                    solo
+                                    type="number"
+                                    style="width: 50px;text-align: center;">
+                            </v-text-field>
+                            <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;W</span>
+                        </template>
+                    </v-slider>
+                </v-card>
+                <v-card class="form-card" style="margin: 8px;display: inline-block">
+                    <div style="text-align: center;margin-top: 5px;margin-bottom: 5px">
+                        <v-avatar style="position: absolute;left: 10px" size="24">
+                            <img src="../icon/speed.png">
+                        </v-avatar>
+                        Auftragsrate
+                    </div>
+                    <v-slider style="margin: 0 5px 0 5px" v-model="auftragsrate" class="align-center" :max="100"
+                              :min="0" hide-details>
+                        <template v-slot:append>
+                            <v-text-field
+                                    v-model="auftragsrate"
+                                    class="mt-0 pt-0"
+                                    hide-details
+                                    solo
+                                    type="number"
+                                    style="width: 50px;text-align: center;">
+                            </v-text-field>
+                            <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;kg/h</span>
+                        </template>
+                    </v-slider>
+                </v-card>
+                <v-card class="form-card" style="margin: 8px;display: inline-block">
+                    <div style="text-align: center;margin-top: 5px;margin-bottom: 5px">
+                        <v-avatar style="position: absolute;left: 10px" size="24">
+                            <img src="../icon/remove.png">
+                        </v-avatar>
+                        Material removal ratio
+                    </div>
+                    <v-slider style="margin: 0 5px 0 5px" v-model="removal" class="align-center" :max="100" :min="0"
+                              hide-details>
+                        <template v-slot:append>
+                            <v-text-field
+                                    v-model="removal"
+                                    class="mt-0 pt-0"
+                                    hide-details
+                                    solo
+                                    type="number"
+                                    style="width: 50px;text-align: center;">
+                            </v-text-field>
+                            <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;%</span>
+                        </template>
+                    </v-slider>
+                </v-card>
+                <v-card class="form-card" style="margin: 8px;display: inline-block">
+                    <div style="text-align: center;margin-top: 5px;margin-bottom: 5px">
+                        <v-avatar style="position: absolute;left: 10px" size="24">
+                            <img src="../icon/efficiency.png">
+                        </v-avatar>
+                        Powder efficiency DED
+                    </div>
+                    <v-slider style="margin: 0 5px 0 5px" v-model="efficiency" class="align-center" :max="100" :min="0"
+                              hide-details>
+                        <template v-slot:append>
+                            <v-text-field
+                                    v-model="efficiency"
+                                    class="mt-0 pt-0"
+                                    hide-details
+                                    solo
+                                    type="number"
+                                    style="width: 50px;text-align: center;">
+                            </v-text-field>
+                            <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;%</span>
+                        </template>
+                    </v-slider>
+                </v-card>
+            </div>
+            <v-btn
+                    rounded
+                    color="primary"
+                    dark
+                    style="width: calc(100% - 16px);margin-left: 8px"
+                    @click="confirm">
+                Confirm
+            </v-btn>
+        </div>
+    </v-app>
+</script>
+
+<div id="app"></div>
+</body>
+<script>
+    const App = {
+        template: '#app-template',
+        data: () => ({
+            items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+            volumen: 0,
+            laserleistung: 0,
+            auftragsrate: 0,
+            removal: 0,
+            efficiency: 0
+        }),
+        methods: {
+            back() {
+                window.history.go(-1);
+            },
+            confirm() {
+                window.location.href = "result.html"
+            }
+        }
+    }
+
+
+    new Vue({
+        vuetify: new Vuetify(),
+        render: h => h(App)
+    }).$mount('#app')
+</script>
+<style>
+    .form-card {
+        width: calc(100% - 16px);
+    }
+
+    input {
+        text-align: center;
+    }
+
+    .v-text-field.v-text-field--solo .v-input__control {
+        min-height: 0 !important;
+    }
+</style>
+
+</html>

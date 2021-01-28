@@ -6,10 +6,10 @@
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <title></title>
     <script src="js/mui.min.js"></script>
-    <link href="css/mui.min.css" rel="stylesheet"/>
     <script type="text/javascript" charset="utf-8">
         mui.init();
     </script>
+    <script src="js/utils.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
@@ -18,6 +18,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
-
+<script type="text/x-template" id="app-template">
+    <v-app>
+        <div class="login">
+                <v-avatar
+                        size="164"
+                        tile>
+                    <v-img src="images/login.png"></v-img>
+                </v-avatar>
+                <h1>3D-Drucker</h1>
+            <div style="width: 250px">
+                <v-text-field
+                        v-model="username"
+                        label="you@example.com"
+                        solo
+                ></v-text-field>
+            </div>
+            <div style="width: 250px;margin-top: 10px">
+                <v-text-field
+                        v-model="password"
+                        label="Password"
+                        solo
+                        type="password"
+                ></v-text-field>
+            </div>
+            <v-btn
+                    color="teal"
+                    elevation="2"
+                    dark
+                    style="width: 250px;margin-top: 10px"
+                    @click="login"
+            >Sign in</v-btn>
+        </div>
+        <div class="alert" v-if="alert">
+            <v-alert :type="type">{{message}}</v-alert>
+        </div>
+    </v-app>
+</script>
+<div id="app"></div>
 </body>
+<script>
+    const App = {
+        template: '#app-template',
+        data: () => ({
+            username: '',
+            password: '',
+            users: [
+                {"username": "test", "password": "123"},
+                {"username": "zxy", "password": "123456"}
+            ],
+            alert: false,
+            type: 'error',
+            message: 'asdas'
+        }),
+        methods: {
+            login() {
+                if (this.username == '') {
+                    this.alertMessage('error', 'Username is empty.')
+                }
+                if (this.password == '') {
+                    this.alertMessage('error', 'Password is empty.')
+                }
+                var result = this.users.filter(item => item.username == this.username && item.password == this.password);
+                if (result.length == 0) {
+                    this.alertMessage('error', 'Username or password is error.')
+                } else {
+                    Utils.saveData("user", this.username);
+                    window.location.href = "index.html";
+                }
+            },
+            alertMessage(type, message) {
+                this.alert = true;
+                this.type = type;
+                this.message = message;
+                setTimeout(() => {
+                    this.alert = false
+                }, 2000)
+            }
+        }
+    }
+
+    new Vue({
+        vuetify: new Vuetify(),
+        render: h => h(App)
+    }).$mount('#app')
+</script>
+<style>
+    .login {
+        display: flex;
+        align-items: center; /*垂直居中*/
+        justify-content: center; /*水平居中*/
+        flex-direction: column;
+        height: 100%;
+        background-color: black;
+        color: white;
+    }
+    
+    .v-text-field__details {
+        display: none;
+    }
+    
+    .alert {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: flex;
+        align-items: center; /*垂直居中*/
+        justify-content: center; /*水平居中*/
+    }
+</style>
 </html>

@@ -3025,7 +3025,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
  */
 (function($, window, undefined) {
 
-	var jsonType = 'application/json';
+	var jsonType = 'application/data';
 	var htmlType = 'text/html';
 	var rscript = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
 	var scriptTypeRE = /^(?:text|application)\/javascript/i;
@@ -3100,7 +3100,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
 			if(!contentType && options.headers) {
 				contentType = options.headers['Content-Type'];
 			}
-			if(contentType && ~contentType.indexOf(jsonType)) { //application/json
+			if(contentType && ~contentType.indexOf(jsonType)) { //application/data
 				options.data = JSON.stringify(options.data);
 			} else {
 				options.data = $.param(options.data, options.traditional);

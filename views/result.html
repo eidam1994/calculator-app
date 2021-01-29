@@ -12,6 +12,7 @@
         mui.init();
     </script>
     <script src="../js/echarts.min.js"></script>
+    <script src="../js/utils.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
@@ -215,11 +216,24 @@
                     }]
                 };
                 barChart.setOption(barOption)
+            },
+            getData() {
+                
+                this.fileName = Utils.getParam("fileName");
+                this.material = Utils.getParam("material");
+                var volumen = Utils.getParam("volumen");
+                this.laserleistung = Utils.getParam("laserleistung");
+                var auftragsrate = Utils.getParam("auftragsrate");
+                this.removal = Utils.getParam("removal");
+                this.efficiency = Utils.getParam("efficiency");
+                this.raw = Utils.getParam("result1");
+
             }
         },
         mounted() {
+            this.getData();
             this.$nextTick(() => {
-                this.drawChart()
+                this.drawChart();
             })
         }
     }
@@ -234,7 +248,7 @@
     .form-card {
         width: calc(100% - 16px);
     }
-    
+
     .v-card__title {
         padding-bottom: 0px !important;
     }
@@ -242,7 +256,7 @@
     .v-list-item {
         min-height: 0 !important;
     }
-    
+
     .v-list-item__content {
         padding-top: 0px !important;
     }

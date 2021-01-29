@@ -11,6 +11,15 @@
     <script type="text/javascript" charset="utf-8">
         mui.init();
     </script>
+    <script src="../js/jquery.js"></script>
+    <script src="../js/jquery.actual.min.js"></script>
+    <script src="../js/three.min.js"></script>
+    <script src="../js/dat.gui.min.js"></script>
+    <script src="../js/OrbitControls.js"></script>
+    <script src="../js/stats.min.js"></script>
+    <script src="../js/STLLoader.js"></script>
+    <script src="../js/import.js"></script>
+    <script src="../js/utils.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
@@ -35,7 +44,7 @@
                         </v-avatar>
                         Material
                     </div>
-                    <v-select :items="items" label="Material" style="margin: 0 5px 0 5px"></v-select>
+                    <v-select :items="items" v-model="material" label="Material" style="margin: 0 5px 0 5px"></v-select>
                 </v-card>
                 <v-card class="form-card" style="margin: 8px;display: inline-block">
                     <div style="text-align: center;margin-top: 5px;margin-bottom: 5px">
@@ -43,20 +52,24 @@
                             <img src="../icon/volume.png">
                         </v-avatar>
                         Volumen
-                        <v-avatar tile style="position: absolute;left: calc(100% - 30px)" size="24">
+                        <v-avatar v-if="stlVisible" @click="stlDialog = !stlDialog" tile style="position: absolute;left: calc(100% - 65px)" size="24">
+                            <img src="../icon/view.png">
+                        </v-avatar>
+                        <v-avatar @click="importStl" tile style="position: absolute;left: calc(100% - 30px)" size="24">
                             <img src="../icon/import.png">
                         </v-avatar>
+                        <input ref="uploadFile" @change="getFile" type="file" style="display:none"/>
                     </div>
-                    <v-slider style="margin: 0 5px 0 5px" v-model="volumen" class="align-center" :max="100" :min="0"
+                    <v-slider style="margin: 0 5px 0 5px" :step="0.01" v-model="volumen" class="align-center" :max="100" :min="0"
                               hide-details>
                         <template v-slot:append>
                             <v-text-field
                                     v-model="volumen"
-                                    class="mt-0 pt-0"
+                                    class="mt-0 pt-0 volume"
                                     hide-details
                                     solo
                                     type="number"
-                                    style="width: 50px;text-align: center;">
+                                    style="width: 70px;text-align: center;">
                             </v-text-field>
                             <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;cm3</span>
                         </template>
@@ -78,7 +91,7 @@
                                     hide-details
                                     solo
                                     type="number"
-                                    style="width: 50px;text-align: center;">
+                                    style="width: 70px;text-align: center;">
                             </v-text-field>
                             <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;W</span>
                         </template>
@@ -100,7 +113,7 @@
                                     hide-details
                                     solo
                                     type="number"
-                                    style="width: 50px;text-align: center;">
+                                    style="width: 70px;text-align: center;">
                             </v-text-field>
                             <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;kg/h</span>
                         </template>
@@ -122,7 +135,7 @@
                                     hide-details
                                     solo
                                     type="number"
-                                    style="width: 50px;text-align: center;">
+                                    style="width: 70px;text-align: center;">
                             </v-text-field>
                             <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;%</span>
                         </template>
@@ -144,7 +157,7 @@
                                     hide-details
                                     solo
                                     type="number"
-                                    style="width: 50px;text-align: center;">
+                                    style="width: 70px;text-align: center;">
                             </v-text-field>
                             <span style="line-height: 32px;width: 45px;">&nbsp;&nbsp;&nbsp;%</span>
                         </template>
@@ -160,6 +173,9 @@
                 Confirm
             </v-btn>
         </div>
+        <v-dialog v-model="stlDialog" :eager="true">
+            <div id="stlCanvas" v-bind:volume="volumen" style="width:100%; height:300px;"></div>
+        </v-dialog>
     </v-app>
 </script>
 
@@ -170,18 +186,52 @@
         template: '#app-template',
         data: () => ({
             items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+            material : '',
             volumen: 0,
             laserleistung: 0,
             auftragsrate: 0,
             removal: 0,
-            efficiency: 0
+            efficiency: 0,
+            fileName: 'No File',
+            stlDialog: false,
+            stlVisible: false
         }),
         methods: {
             back() {
                 window.history.go(-1);
             },
             confirm() {
-                window.location.href = "result.html"
+                var fileName = this.fileName;
+                var material = this.material;
+                var volumen = this.volumen;
+                var laserleistung = this.laserleistung;
+                var auftragsrate = this.auftragsrate;
+                var removal = this.removal;
+                var efficiency = this.efficiency;
+                var result1 = (parseFloat(volumen) / (1 - parseFloat(removal / 100)) / parseFloat(efficiency / 100)).toFixed(2);
+                window.location.href = "result.html?fileName=" + fileName + "&material=" + material + "&volumen=" + volumen
+                    + "&laserleistung=" + laserleistung + "&auftragsrate=" + auftragsrate 
+                    + "&removal=" + removal + "&efficiency=" + efficiency+ "&result1=" + result1
+                    // + "&removal=" + removal + "&removal=" + removal + "&removal=" + removal + "&removal=" + removal
+            },
+            importStl() {
+                this.$refs.uploadFile.dispatchEvent(new MouseEvent('click'))
+            },
+            getFile(e) {
+                $("#stlCanvas").empty()
+                let stlFile = e.target.files[0]
+                this.fileName = stlFile.name;
+                let windowURL = window.URL || window.webkitURL;
+                let url = windowURL.createObjectURL(stlFile);
+                this.stlDialog = true;
+                let width = $("#stlCanvas").actual('width')
+                let height = $("#stlCanvas").actual('height')
+                this.draw(url, width, height)
+            },
+            draw(url, width, height) {
+                var stlCanvas = document.getElementById("stlCanvas");
+                Utils.createStl(url, stlCanvas, width, height);
+                this.stlVisible = true;
             }
         }
     }
